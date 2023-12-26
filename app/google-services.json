@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "300246974940",
+    "firebase_url": "https://my-task-managing-master-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "my-task-managing-master",
+    "storage_bucket": "my-task-managing-master.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300246974940:android:ecbdfdd1425fa262bfcf19",
+        "android_client_info": {
+          "package_name": "com.example.mytaskmanagingmaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAChLoAHsE6QICc5UpNiFeKuhCZmfV481I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
