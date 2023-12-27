@@ -3,16 +3,21 @@ package com.example.mytaskmanagingmaster;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.DatePicker;
 
 import com.example.mytaskmanagingmaster.ui.home.HomeFragment;
-import com.example.mytaskmanagingmaster.ui.home.TaskItem;
+import com.example.mytaskmanagingmaster.ui.taskItem.TaskItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -33,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Initialize Firebase Database's persistence layer
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -52,24 +54,24 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton addButton = findViewById(R.id.fab);
 
         // 設定 FloatingActionButton 的點選事件
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 顯示新增任務的對話方塊
-                showAddTaskDialog();
-            }
+        addButton.setOnClickListener(view -> {
+            // 顯示新增任務的對話方塊
+            showAddTaskDialog();
         });
 
-        FloatingActionButton logoutButton = findViewById(R.id.logout);
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // 設定 NavigationView 的菜單項點選事件
+        binding.navViewDrawer.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_logout) {
+                // 處理登出
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), Login.class);
+                Intent intent = new Intent(MainActivity.this, Login.class);
                 startActivity(intent);
                 finish();
+                return true;
             }
+            // 處理其他菜單項點選事件（如果有）
+            return false;
         });
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -85,6 +87,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_open_drawer) {
+            // 處理點選事件，例如打開側邊欄
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.END)) {
+                drawer.closeDrawer(GravityCompat.END);
+            } else {
+                drawer.openDrawer(GravityCompat.END);
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     // 顯示新增任務的對話方塊
     private void showAddTaskDialog() {

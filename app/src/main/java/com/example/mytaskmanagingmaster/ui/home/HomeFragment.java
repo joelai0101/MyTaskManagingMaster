@@ -1,14 +1,11 @@
 package com.example.mytaskmanagingmaster.ui.home;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,15 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytaskmanagingmaster.R;
 import com.example.mytaskmanagingmaster.databinding.FragmentHomeBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.mytaskmanagingmaster.ui.taskItem.TaskItem;
+import com.example.mytaskmanagingmaster.ui.taskItem.TaskItemAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 public class HomeFragment extends Fragment {
 

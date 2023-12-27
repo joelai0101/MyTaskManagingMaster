@@ -1,4 +1,4 @@
-package com.example.mytaskmanagingmaster.ui.home;
+package com.example.mytaskmanagingmaster.ui.taskItem;
 
 public interface TaskItemClickListener {
     void onTaskItemClick(TaskItem taskItem);

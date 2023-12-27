@@ -9,14 +9,14 @@ import androidx.lifecycle.ViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.mytaskmanagingmaster.ui.taskItem.LocalDateConverter;
+import com.example.mytaskmanagingmaster.ui.taskItem.TaskItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -48,7 +48,7 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
-    public void updateTaskItem(TaskItem selectedTask, String taskName, String taskDescription, LocalDate updatedDueDate) {
+    public void updateTaskItem(@NonNull TaskItem selectedTask, String taskName, String taskDescription, LocalDate updatedDueDate) {
         // 創建更新後的 TaskItem
         TaskItem updatedTask = new TaskItem(selectedTask.getId(), taskName, taskDescription, updatedDueDate);
 
@@ -71,7 +71,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     // 添加以下方法處理刪除任務
-    public void deleteTaskItem(TaskItem taskItem) {
+    public void deleteTaskItem(@NonNull TaskItem taskItem) {
         String taskId = taskItem.getId();
 
         // 刪除 Firebase 中的任務
