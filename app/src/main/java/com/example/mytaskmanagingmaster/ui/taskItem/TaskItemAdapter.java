@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytaskmanagingmaster.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -73,7 +75,14 @@ public class TaskItemAdapter extends RecyclerView.Adapter<TaskItemAdapter.TaskIt
 
             checkbox = itemView.findViewById(R.id.checkbox); // 初始化 checkbox
             checkbox.setOnClickListener(this); // 設置 Checkbox 的點擊事件
-            tasksReference = FirebaseDatabase.getInstance().getReference().child("tasks");
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
+                tasksReference = FirebaseDatabase.getInstance().getReference().child("tasks").child(userId);
+            } else {
+                // 處理未登錄使用者的情況
+                tasksReference = null;
+            }
 
         }
 

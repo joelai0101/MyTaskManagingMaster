@@ -15,4 +15,12 @@
 
     <color name="my_primary">#5E35B1</color>
     <color name="my_secondary">#673AB7</color>
+    <!-- Primary theme colors -->
+    <color name="colorPrimary">#2196F3</color> <!-- 亮藍色 -->
+    <color name="colorPrimaryDark">#1976D2</color> <!-- 深藍色 -->
+    <color name="colorAccent">#2196F3</color> <!-- 豔黃色 -->
+    <!-- ... 其他顏色定義 ... -->
+    <color name="fabColor">#5e88a6</color>
+    <!-- 其他顏色定義... -->
+    <color name="fabIconColor">#FFFFFFFF</color>
 </resources>

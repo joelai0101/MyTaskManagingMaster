@@ -14,6 +14,8 @@ import java.util.Map;
 
 import com.example.mytaskmanagingmaster.ui.taskItem.LocalDateConverter;
 import com.example.mytaskmanagingmaster.ui.taskItem.TaskItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +32,14 @@ public class HomeViewModel extends ViewModel {
         taskItems.setValue(new ArrayList<>());
 
         // 初始化 Firebase Database 引用
-        databaseReference = FirebaseDatabase.getInstance().getReference("tasks");
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            databaseReference = FirebaseDatabase.getInstance().getReference("tasks").child(userId);
+        } else {
+            // 處理未登錄使用者的情況
+            databaseReference = null;
+        }
 
         // 設定 Firebase Database 的監聽器
         setupFirebaseListener();
@@ -63,11 +72,14 @@ public class HomeViewModel extends ViewModel {
         }
 
         // 獲取 Firebase Database 引用
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("tasks");
-
-        // 更新 "tasks" 路徑下的任務
-        Map<String, Object> taskMap = updatedTask.toMap();
-        databaseReference.child(selectedTask.getId()).setValue(taskMap); // Assuming you have a toMap() method in TaskItem
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference userTasksReference = FirebaseDatabase.getInstance().getReference("tasks").child(userId);
+            userTasksReference.child(selectedTask.getId()).setValue(updatedTask.toMap());
+        } else {
+            // 處理未登錄使用者的情況
+        }
     }
 
     // 添加以下方法處理刪除任務

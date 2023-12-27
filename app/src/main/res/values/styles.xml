@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <!-- 主色調 -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- 狀態列顏色 -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- 強調色 -->
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 </resources>

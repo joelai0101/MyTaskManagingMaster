@@ -42,8 +42,11 @@
             android:layout_marginBottom="64dp"
             android:clickable="true"
             android:src="@android:drawable/ic_input_add"
+            android:tint="@color/fabIconColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:backgroundTint="@color/fabColor"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 public class MainActivity extends AppCompatActivity {
@@ -146,23 +147,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addTask(String taskName, String taskDescription, LocalDate dueDate) {
-        // 獲取 Firebase Database 引用
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("tasks");
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            // 獲取特定使用者的 Firebase Database 任務引用路徑
+            DatabaseReference userTasksReference = FirebaseDatabase.getInstance().getReference("tasks").child(userId);
+            // 在路徑下新增任務，Firebase 會自動生成唯一的 ID
+            String taskId = userTasksReference.push().getKey();
+            // Create TaskItem and serialize dueDate
+            TaskItem newTask = new TaskItem(taskId, taskName, taskDescription, dueDate);
+            userTasksReference.child(taskId).setValue(newTask.toMap());
 
-        // 在 "tasks" 路徑下新增任務，Firebase 會自動生成唯一的 ID
-        String taskId = databaseReference.push().getKey();
-
-        // Create TaskItem and serialize dueDate
-        TaskItem newTask = new TaskItem(taskId, taskName, taskDescription, dueDate);
-        Map<String, Object> taskMap = newTask.toMap(); // Assuming you have a toMap() method in TaskItem
-
-        // Set the value in Firebase Database
-        databaseReference.child(taskId).setValue(taskMap);
-
-        // 在 HomeFragment 中新增任務
-        HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-        if (homeFragment != null) {
-            homeFragment.addTask(taskId, taskName, taskDescription, dueDate);
+            // 在 HomeFragment 中新增任務
+            HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+            if (homeFragment != null) {
+                homeFragment.addTask(taskId, taskName, taskDescription, dueDate);
+            }
+        } else {
+            // 處理未登錄使用者的情況
         }
     }
 
