@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -95,6 +96,26 @@ public class DashboardViewModel extends ViewModel {
 
     }
 
+    Comparator<TaskItem> taskComparator = new Comparator<TaskItem>() {
+        @Override
+        public int compare(TaskItem task1, TaskItem task2) {
+            // 首先比較截止日期
+            LocalDate dueDate1 = task1.getDueDate();
+            LocalDate dueDate2 = task2.getDueDate();
+            int dateCompare = dueDate1.compareTo(dueDate2);
+
+            if (dateCompare != 0) {
+                // 如果日期不同，根據日期排序
+                return dateCompare;
+            } else {
+                // 如果日期相同，比較任務名稱
+                String name1 = task1.getName();
+                String name2 = task2.getName();
+                return name1.compareToIgnoreCase(name2);
+            }
+        }
+    };
+
     private void setupFirebaseListener() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -128,7 +149,9 @@ public class DashboardViewModel extends ViewModel {
                         Log.e("FirebaseListener", "Unexpected data type: " + snapshotValue.getClass().getSimpleName());
                     }
                 }
-
+                // 使用自訂比較器對任務列表進行排序
+                Collections.sort(allTaskItemList, taskComparator);
+                Collections.sort(selectedDateTaskItemList, taskComparator);
                 // 更新全域和選定日期的任務列表
                 taskItems.setValue(allTaskItemList);
                 selectedDateTaskItems.setValue(selectedDateTaskItemList);
